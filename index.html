@@ -1,0 +1,39 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Cutoff Scores</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    body { padding-top: 2rem; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Lowest Accepted Scores</h1>
+    <p>Current cutoffs for admission group 1 and Excellence Scholarships.</p>
+    
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Program</th>
+          <th>Admission Cutoff</th>
+          <th>Scholarship Cutoff</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in site.data.scores %}
+        <tr>
+          <td><strong>{{ row.Program }}</strong></td>
+          <td>{{ row['Admission Cutoff'] }}</td>
+          <td>{{ row['Scholarship Cutoff'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
