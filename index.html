@@ -16,9 +16,9 @@
     /* Futuristic Theme Overrides */
     :root {
       --pico-font-family-base: 'Space Grotesk', sans-serif;
-      --pico-background-color: #090c10; /* Deep space background */
-      --pico-color: #c9d1d9; /* Tech gray text */
-      --pico-primary: #00ffcc; /* Neon cyan */
+      --pico-background-color: #090c10;
+      --pico-color: #c9d1d9;
+      --pico-primary: #00ffcc;
       --pico-primary-hover: #00ccaa;
       --pico-primary-background: rgba(0, 255, 204, 0.1);
       --pico-form-element-background-color: #161b22;
@@ -26,7 +26,6 @@
 
     body { padding-top: 4rem; position: relative; }
     
-    /* Language Toggle Bar - Hidden when scrolling down */
     #lang-bar {
       position: absolute;
       top: 0;
@@ -43,7 +42,6 @@
     .lang-btn:hover { color: var(--pico-primary-hover); background: transparent; }
     .lang-btn.active { color: var(--pico-primary); font-weight: bold; text-shadow: 0 0 5px rgba(0,255,204,0.5); }
 
-    /* Language Hiding Logic */
     body:not(.lang-en) .en,
     body:not(.lang-fi) .fi,
     body:not(.lang-vi) .vi {
@@ -51,6 +49,23 @@
     }
 
     .last-updated { font-size: 0.85em; color: var(--pico-primary); margin-bottom: 2rem; }
+    
+    /* Waitlist Badge Styling */
+    .badge-waitlist {
+      display: inline-block;
+      font-size: 0.65rem;
+      background: var(--pico-primary-background);
+      color: var(--pico-primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--pico-primary);
+      margin-left: 0.5rem;
+      vertical-align: middle;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: help;
+    }
+
     .legend { font-size: 0.9em; margin-top: 2rem; padding: 1rem; background-color: var(--pico-form-element-background-color); border-radius: var(--pico-border-radius); border-left: 3px solid var(--pico-primary); }
     .legend ul { margin-bottom: 0; }
     section { margin-top: 4rem; }
@@ -76,7 +91,7 @@
 
     <p class="en">Current cutoffs for admission group 1 and Excellence Scholarships.</p>
     <p class="fi">Nykyiset pisterajat valintaryhmässä 1 ja Excellence Scholarships -stipendeissä.</p>
-    <p class="vi">Điểm chuẩn hiện tại cho nhóm xét tuyển 1 và Học bổng Excellence Scholarships.</p>
+    <p class="vi">Điểm chuẩn hiện tại cho nhóm xét tuyển 1 và Excellence Scholarships (Học bổng Xuất sắc).</p>
     
     <div class="last-updated">
       <span class="en">Last Information Update:</span>
@@ -105,7 +120,19 @@
         {% for row in site.data.scores %}
         <tr>
           <td><strong>{{ row.Program }}</strong></td>
-          <td>{{ row['Admission Cutoff'] }}</td>
+          <td>
+            <!-- Check if a waitlist score exists for this row -->
+            {% if row['Waitlist Cutoff'] and row['Waitlist Cutoff'] != "" %}
+              {{ row['Waitlist Cutoff'] }}
+              <!-- Tooltips trigger on hover on desktop, and tap on mobile -->
+              <span class="badge-waitlist en" data-tooltip="Initial late-March score: {{ row['Admission Cutoff'] }}">Waitlist</span>
+              <span class="badge-waitlist fi" data-tooltip="Alkuperäinen maaliskuun raja: {{ row['Admission Cutoff'] }}">Varasija</span>
+              <span class="badge-waitlist vi" data-tooltip="Điểm đợt đầu (tháng 3): {{ row['Admission Cutoff'] }}">Danh sách chờ</span>
+            {% else %}
+              <!-- If no waitlist score, just show the standard admission score -->
+              {{ row['Admission Cutoff'] }}
+            {% endif %}
+          </td>
           <td>{{ row['Scholarship Cutoff'] }}</td>
         </tr>
         {% endfor %}
@@ -135,20 +162,18 @@
       </ul>
     </div>
 
-    <section class="discord-card">
+    <!-- Discord Section -->
+    <section class="discord-card" style="display: flex; flex-direction: column; align-items: center;">
       <h2 class="en" style="margin-bottom: 0.5rem;">Join the Discord Server</h2>
       <h2 class="fi" style="margin-bottom: 0.5rem;">Liity Discord-palvelimelle</h2>
       <h2 class="vi" style="margin-bottom: 0.5rem;">Tham gia máy chủ Discord</h2>
       
-      <p class="en">Connect with other applicants, share resources, and get the latest updates!</p>
-      <p class="fi">Ota yhteyttä muihin hakijoihin, jaa materiaaleja ja seuraa uusimpia päivityksiä!</p>
-      <p class="vi">Kết nối với các ứng viên khác, chia sẻ tài nguyên và cập nhật thông tin mới nhất!</p>
+      <p class="en">Connect with other applicants, share resources, and get the latest updates.</p>
+      <p class="fi">Ota yhteyttä muihin hakijoihin, jaa materiaaleja ja seuraa uusimpia päivityksiä.</p>
+      <p class="vi">Kết nối với các ứng viên khác, chia sẻ tài nguyên và cập nhật thông tin mới nhất.</p>
       
-      <a href="https://discord.gg/wcusD5HJpA" target="_blank" role="button">
-        <span class="en">Join "Applicants to Aalto"</span>
-        <span class="fi">Liity "Applicants to Aalto" -ryhmään</span>
-        <span class="vi">Tham gia "Applicants to Aalto"</span>
-      </a>
+      <!-- The Official Discord Widget -->
+      <iframe src="https://discord.com/widget?id=YOUR_SERVER_ID_HERE&theme=dark" width="100%" height="400" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts" style="max-width: 400px; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--pico-primary);"></iframe>
     </section>
 
     <section id="contribute">
@@ -162,8 +187,8 @@
       
       <ul>
         <li><strong><span class="en">Discord (preferred!):</span><span class="fi">Discord (suositeltu!):</span><span class="vi">Discord (ưu tiên!):</span></strong> @sonthebaguette, @787_dreamliner</li>
-        <li><strong><span class="en">Reddit:</span><span class="fi">Reddit:</span><span class="vi">Reddit:</span></strong> u/justanotherbaguette, u/tommy2k06</li>
-        <li><strong><span class="en">Threads:</span><span class="fi">Threads:</span><span class="vi">Threads:</span></strong> @lumicrescence</li>
+        <li><strong>Reddit:</strong> u/justanotherbaguette, u/tommy2k06</li>
+        <li><strong>Threads:</strong> @lumicrescence</li>
       </ul>
     </section>
 
@@ -208,9 +233,9 @@
   </main>
 
   <footer class="container disclaimer">
-    <p class="en"><strong>Disclaimer:</strong> This data is a crowdsourced effort compiled by students and applicants. It is not commercial, nor is it <strong>not</strong> affiliated with, endorsed by, or representative of Aalto University. Official cutoff scores may vary.</p>
+    <p class="en"><strong>Disclaimer:</strong> This data is a crowdsourced effort compiled by students and applicants. It is <strong>not</strong> affiliated with, endorsed by, or representative of Aalto University. Official cutoff scores may vary.</p>
     <p class="fi"><strong>Vastuuvapauslauseke:</strong> Tämä on opiskelijoiden ja hakijoiden kokoama epävirallinen tietokanta. Se <strong>ei</strong> ole Aalto-yliopiston hyväksymä eikä edusta yliopiston kantaa. Viralliset pisterajat voivat poiketa tästä.</p>
-    <p class="vi"><strong>Lưu ý:</strong> Dữ liệu này được tổng hợp bởi sinh viên và ứng viên. Dữ liệu này <strong>không</strong> liên kết, không được xác nhận bởi và không đại diện cho Đại học Aalto. Điểm chuẩn chính thức có thể thay đổi.</p>
+    <p class="vi"><strong>Tuyên bố từ chối trách nhiệm:</strong> Dữ liệu này được tổng hợp bởi sinh viên và ứng viên. Dữ liệu này <strong>không</strong> liên kết, không được xác nhận bởi và không đại diện cho Đại học Aalto. Điểm chuẩn chính thức có thể thay đổi.</p>
   </footer>
 
   <script>
